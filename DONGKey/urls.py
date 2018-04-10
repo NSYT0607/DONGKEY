@@ -13,6 +13,7 @@ urlpatterns = [
     path('attendance/', include('attendance.urls', namespace='attendance')),
     path('recruiting/', include('recruiting.urls', namespace='recruiting')),
     path('board/', include('board.urls', namespace='board')),
+    path('map/', include('map.urls', namespace='map')),
 ]
 
 if settings.DEBUG:
