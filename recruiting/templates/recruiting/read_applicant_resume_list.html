@@ -1,0 +1,34 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_key.png"/>
+    리크루팅 > 지원자 관리 : {{ admin_resume.title }}</p>
+<div class="divider"></div>
+
+{% for resume in applicant_resume_list %}
+<table>
+    <tr>
+        <th>작성자</th>
+        <th>작성 일시</th>
+        <th>최근 수정 일시</th>
+        <th>합격 여부</th>
+    </tr>
+    <tr>
+        <td><a href="{% url 'recruiting:read_applicant_resume_for_admin' club.pk resume.pk %}">
+            {{ resume.applicant }}</a></td>
+        <td>{{ resume.created_at }}</td>
+        <td>{{ resume.updated_at }}</td>
+        <td>
+            {% if resume.is_accepted == True %}
+            합격
+            {% else %}
+            불합격
+            {% endif %}
+        </td>
+    </tr>
+</table>
+{% empty %}
+    <p class="collection-item">아직 접수된 지원자가 없습니다.</p>
+{% endfor %}
+{% endblock %}

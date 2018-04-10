@@ -1,0 +1,14 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_key.png"/>
+    리크루팅 > 지원서 양식 만들기</p>
+<div class="divider"></div>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ admin_resume_form.as_p }}
+    <button class="btn" type="submit">지원서 만들기</button>
+</form>
+{% endblock %}

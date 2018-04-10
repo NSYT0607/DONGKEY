@@ -1,0 +1,20 @@
+<div class='row'>
+    <div class='col s6'>
+        <div id='notice_board'>
+            <table>
+                <thead id='notice_board_title'>공지사항</thead>
+                {% for notice in notice_list %}
+                <tr>
+                    <td><a href="{% url 'board:article_detail_admin' notice.pk %}">{{ notice.title }}</a></td>
+                    {% empty %}
+                    <p> 등록된 공지사항이 없습니다.</p>
+                </tr>
+                {% endfor %}
+            </table>
+            <button><a href="{% url 'club:read_non_admin_club' club %}">더보기</a></button>
+        </div>
+    </div>
+</div>
+{% if admin %}
+<a href="{% url 'board:article_create_admin' club.pk %}"class="btn write">글 작성</a>
+{% endif %}

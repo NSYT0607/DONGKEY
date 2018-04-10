@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">작성</button>
+</form>
+<script>
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+</script>
+{% endblock %}

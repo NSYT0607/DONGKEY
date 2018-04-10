@@ -1,0 +1,12 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+
+<div>
+    {{ club.image }}
+    {{ club.description }}
+</div>
+<div>
+    {% include 'board/test_article_list.html' %}
+</div>
+{% endblock %}

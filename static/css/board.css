@@ -1,0 +1,28 @@
+.ctg {
+    padding-left: 30px;
+}
+th.title, td.title {
+    padding-left: 15px;
+}
+div.title_part a.selected {
+    background-color: #ffc107;
+}
+div.title_part a.selected:hover, a.selected:focus {
+    background-color: #fdcd3e;
+}
+div.article_list {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#comment_form{
+    margin-top: 20px;
+}
+#comment_area {
+    margin-top: 20px;
+}
+.article_detail a, .article_detail button{
+    background-color: #ff9800;
+}
+tr.ctg_notice {
+    background-color: #f2f2f2;
+}

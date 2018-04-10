@@ -1,0 +1,84 @@
+{% extends 'non_admin_base.html' %}
+
+{% block non_admin_content %}
+
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkey.png"/>
+    지원하기 > 내 지원서 보기: {{ resume.admin_resume.title }}</p>
+<div class="divider"></div>
+
+<div class="resume" style="margin: 20px 0 30px; border: 1px solid darkgray; padding: 15px; width:100%;">
+    <span id="resume-title" style="display: block; text-align: center; ">
+        <h4>{{ club.name }} 지원서</h4>
+    </span>
+
+    <div>
+        <span>
+        {% if resume.admin_resume.use_image == True %}
+        <img class="applicant_img" src="{{ resume.image_url }}"/>
+        {% endif %}
+        </span>
+        <table style="width: 60%"
+            <tr>
+                <td>이름</td><td>{{ resume.applicant.last_name }}{{ resume.applicant.first_name }}</td>
+            </tr>
+            <tr>
+                <td>이메일</td><td>{{ resume.applicant.email }}</td>
+            </tr>
+            <tr>
+                <td>전화번호</td><td>{{ resume.applicant.profile.phone_number }}</td>
+            </tr>
+            <tr>
+                <td>학교</td><td>{{ resume.applicant.profile.school }}</td>
+            </tr>
+        </table>
+        <table style="width: 60%">
+            {% for question in resume.admin_resume.question_set.all %}
+                {% if question.is_short_answer == True %}
+                <tr>
+                    <td>{{ question.content }}</td>
+                    {% for answer in resume.shortanswer_set.all %}
+                    {% if answer.question == question %}
+                    <td>{{ answer.content }}</td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endif %}
+            {% endfor%}
+        </table>
+
+    <div class="question_list">
+        {% for question in resume.admin_resume.question_set.all %}
+            {% if question.is_short_answer == False %}
+                <div style="font-size: 50px; margin: 10px 0;">Q. {{ question.content }}</div>
+                {% for answer in resume.longanswer_set.all %}
+                    {% if answer.question == question %}
+                    <div style="padding: 10px;  width:100%; height:300px; border:1px solid lightgray;">{{ answer.content }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor%}
+    </div>
+
+    <h3 style="text-align: center;"><strong>{{ resume.admin_resume.bottom_msg }}</strong></h3>
+    <h6 style="text-align:right; margin-top: 50px;">**기본 인적사항은 본인의 기본 정보 및 프로필에 따라 자동으로 기입됩니다.</h6>
+</div>
+
+<div>
+    <a style="display: inline-block;" class="btn"
+       href="{% url 'recruiting:admin_resume_list_for_applicant' club.pk %}">
+        지원서 목록으로</a>
+    <form method="POST" style="display: inline-block; float: right; margin-left: 20px;"
+          action="{% url 'recruiting:delete_applicant_resume' resume.pk %}">
+        {% csrf_token %}
+        <button style="display:inline-block;" id="applicant_resume_delete_btn" class="btn" type="submit">삭제</button>
+    </form>
+</div>
+<script>
+    $('#applicant_resume_delete_btn').click(function(e) {
+        if (!confirm('지원서를 삭제하시겠습니까?')) {
+            return false;
+        }
+    });
+</script>
+{% endblock %}

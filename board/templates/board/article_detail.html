@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="article_detail">
+    <h4 id="title_tag">{{ article.title }}</h4>
+    <p id="p_tag" style="font-size: 12px"> {{ article.created_at|date:"Y. m. d h:i A" }} <br />
+    {% if article.created_at != article.updated_at %}
+    (수정) {{ article.updated_at|date:"Y. m. d h:i A" }} <br />
+    {% endif %}
+    나상연</p>
+    <br />
+    <pre style="white-space: pre-wrap">{{ article.content }}</pre>
+    {% for tag in article.tag.all %}
+    <div class="chip">{{ tag.name }}</div>
+    {% endfor %}
+    <br />
+    <div id="rec" style="text-align: center;">
+        <a href="{% url 'board:article_like' article.pk %}" class="btn">추천 {{ article.liker_set.count }}</a>
+    </div>
+    <br />
+    <a href="{% url 'club:read_non_admin_club' article.club.name %}"class="btn">글 목록</a>
+    <div style="float: right;">
+        <a class="btn" href="{% url 'board:article_update' article.pk %}">수정</a>
+        <form method="POST" style="display: inline-block;" action="{% url 'board:article_delete' article.pk %}">
+        {% csrf_token %}
+            <button type="submit" class="btn">삭제</button>
+        </form>
+    </div>
+
+    <div id="comment_area">
+        <h5>댓글영역</h5>
+        <form id="comment_form" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" class="btn" action="{% url 'board:article_detail' article.pk %}">작성</button>
+        </form>
+    </div>
+    <br/>
+    {% for comment in article.comment_set.all %}
+    <p>{{ comment.author.username }}: {{ comment.content }}</p>
+    <a href="{% url 'board:comment_like' comment.pk %}" class="btn">추천 {{ comment.liker_set.count }}</a>
+    <br />
+    {% endfor %}
+
+    {% endblock %}
+</div>

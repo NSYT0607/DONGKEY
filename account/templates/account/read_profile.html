@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkeyandkey.png"/>
+    {{ request.user.username }}의 프로필</p>
+<div class="divider"></div>
+<br/><br/>
+<p>이메일 : {{ request.user.email }}</p>
+<p>학교 : {{ profile.school }}</p>
+<p>전화번호 : {{ profile.phone_number }}</p>
+<br/><br/><br/>
+<a  class="btn" href="{% url 'account:update_profile' request.user.pk %}">프로필 수정</a>
+{% endblock %}

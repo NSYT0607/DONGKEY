@@ -1,0 +1,139 @@
+div.row .1st{
+    margin: 30px;
+}
+div#test {
+    height: 30px;
+    border: 1px solid black;
+}
+#income_form {
+    border: 1px solid black;
+    padding: 30px 30px;
+}
+#expd_form {
+    border: 1px solid black;
+    padding: 30px 30px;
+}
+
+div#accounting {
+    text-align: center;
+}
+#account_sum {
+}
+#account_sum h4 {
+    text-align: center;
+    margin-top: 60px;
+}
+
+div#income_sum {
+    display: inline-block;
+    margin-top: 20px;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+div#expd_sum {
+    display: inline-block;
+    margin-top: 15px;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+.receipt_image{
+    width: 18px;
+    height: 28px;
+}
+table {
+    padding: 0 10px;
+}
+div.date_input {
+    margin-top: 20px;
+}
+div#income_form{
+    margin-bottom: 20px;
+}
+div#form_area{
+    margin-top: 30px;
+}
+
+#income_tr th#first{
+    width: 63%;
+    padding-left: 30px;
+    text-align: center;
+}
+#income_tr td#first{
+    width: 63%;
+    padding-left: 30px;
+}
+#income_tr th#second{
+    width: 15%;
+}
+#income_tr td#second{
+    width: 15%;
+    padding-right: 10px;
+    text-align: right;
+}
+#income_tr th#third{
+    width: 13%;
+}
+#income_tr td#third{
+    width: 13%;
+}
+#income_tr th#fourth, td#fourth{
+    width: 9%;
+    text-align: center;
+}
+#income_tr th {
+    text-align: center
+}
+
+
+#expd_tr th#first{
+    width: 53%;
+    padding-left: 30px;
+    text-align: center;
+}
+#expd_tr td#first{
+    width: 53%;
+    padding-left: 30px;
+}
+#expd_tr th#second{
+    width: 15%;
+    padding-left: 20px;
+    text-align: center;
+}
+#expd_tr td#second{
+    width: 15%;
+    padding-right: 10px;
+    text-align: right;
+}
+#expd_tr th#third, td#third{
+    width: 15%;
+    text-align: center;
+}
+#expd_tr th#fourth, td#fourth{
+    width: 9%;
+    text-align: center;
+}
+#expd_tr th#fifth, td#fifth{
+    width: 8%;
+    text-align: center;
+}
+.material-icons {
+    font-size: 20px;
+    color: black;
+}
+div#year {
+    width: 20%;
+    display: inline-block;
+}
+div#month {
+    width: 20%;
+    display: inline-block;
+    margin-left: 10px;
+}
+div.date_input {
+    text-align: center;
+}
+.select-wrapper input.select-dropdown {
+    text-align: center;
+}

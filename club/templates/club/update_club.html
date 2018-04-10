@@ -1,0 +1,13 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_key.png"/>기본 정보</p>
+<div class="divider"></div>
+
+<form method='POST' enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ club_form.as_p }}
+  <button class="btn" type='submit'>수정하기</button>
+</form>
+{% endblock %}

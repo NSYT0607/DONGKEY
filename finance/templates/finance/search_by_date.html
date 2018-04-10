@@ -1,0 +1,110 @@
+{% load money %}
+<div class="row">
+    <div class="col s12 m10 offset-m1" id="account_sum">
+        {% if year and month %}
+        <li>{{ year }}년 {{ month }} 월</li>
+        <li>총 수입 금액: {{ income_sum|won }}</li>
+        <li>총 지출 금액: {{ expd_sum|won }}</li>
+        <li>총 회계 잔액: {{ account_sum|won }}</li>
+        {% elif year %}
+        <li>{{ year }}년</li>
+        <li>총 수입 금액: {{ income_sum|won }}</li>
+        <li>총 지출 금액: {{ expd_sum|won }}</li>
+        <li>총 회계 잔액: {{ account_sum|won }}</li>
+        {% endif %}
+
+        <div id="income_sum">
+            <table class="striped bordered">
+                <thead>
+                  <tr id="income_tr">
+                      <th id='first'>수입 내역</th>
+                      <th id="second">금액</th>
+                      <th id="third">수입 일자</th>
+                      <th id="fourth"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for income in income_part %}
+                    <tr id="income_tr">
+                        <td id='first'>{{ income.detail }}</td>
+                        <td id="second">{{ income.amount|won }}</td>
+                        <td id="third">{{ income.income_at|date:"Y.m.d" }}</td>
+                        <td id="fourth">
+                            <a href="#"><i class="material-icons">edit</i></a>
+                            <a href="#"><i class="material-icons">delete_forever</i></a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr id="income_tr">
+                        <td id='first'>회계 내역이 없습니다.</td>
+                        <td id="second"></td>
+                        <td id="third"></td>
+                        <td id="fourth">
+                            <a><i class="material-icons">edit</i></a>
+                            <a><i class="material-icons">delete_forever</i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m10 offset-m1" id="account_sum">
+        <div id="expd_sum">
+            <table class="striped bordered">
+                <thead>
+                  <tr id="expd_tr">
+                      <th id='first'>지출 내역</th>
+                      <th id="second">금액</th>
+                      <th id="third">지출 일자</th>
+                      <th id="fourth">영수증</th>
+                      <th id="fifth"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for expd in expd_part %}
+                    <tr id="expd_tr">
+                        <td id='first'>{{ expd.detail }}</td>
+                        <td id="second">{{ expd.amount|won }}</td>
+                        <td id="third">{{ expd.expd_at|date:"Y.m.d" }}</td>
+                        <td id="fourth">
+                            {% if expd.receipt %}
+                            <a href="{{ expd.receipt_url }}" target="popup" onclick="window.open('{{ expd.receipt_url }}','popup','width=400,height=500'); return false;">
+                                <img class="responsive-img receipt_image" src="/static/img/receipt.png">
+                            </a>
+                            {% else %}
+                            <img class="responsive-img receipt_image" src="/static/img/no_receipt.png">
+                            {% endif %}
+                        </td>
+                        <td id="fifth">
+                            <a href="#"><i class="material-icons">edit</i></a>
+                            <a href="#"><i class="material-icons">delete_forever</i></a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr id="expd_tr">
+                        <td id='first'>회계 내역이 없습니다.</td>
+                        <td id="second"></td>
+                        <td id="third"></td>
+                        <td id="fourth">
+                            {% if expd.receipt %}
+                            <a href="{{ expd.receipt_url }}" target="popup" onclick="window.open('{{ expd.receipt_url }}','popup','width=400,height=500'); return false;">
+                                <img class="responsive-img receipt_image" src="/static/img/receipt.png">
+                            </a>
+                            {% else %}
+                            <img class="responsive-img receipt_image" src="/static/img/no_receipt.png">
+                            {% endif %}
+                        </td>
+                        <td id="fifth">
+                            <a><i class="material-icons">edit</i></a>
+                            <a><i class="material-icons">delete_forever</i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

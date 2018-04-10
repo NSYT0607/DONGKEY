@@ -1,0 +1,78 @@
+<div class="title_part">
+    <a href="{% url 'club:read_non_admin_club' club.name %}"
+        class="waves-effect waves-light btn {% if ctg_selected == None %}selected{% endif %}">
+        전체 게시물
+    </a>
+    <a href="{% url 'club:read_non_admin_club_ctg' club.name ctg_notice.pk %}"
+        class="waves-effect waves-light btn {% if ctg_notice == ctg_selected %}selected{% endif %}">
+        {{ ctg_notice.name }}
+    </a>
+    {% for ctg in category_list %}
+    <a href="{% url 'club:read_non_admin_club_ctg' club.name ctg.pk %}" class="waves-effect waves-light btn {% if ctg == ctg_selected %}selected{% endif %}">
+        {{ ctg.name }}
+    </a>
+    {% endfor %}
+</div>
+<div class='article_list'>
+    <table class="bordered highlight">
+        <thead>
+          <tr style="background-color: #80808024;">
+            {% if ctg_selected == None %}
+            <th class="ctg" style="width: 15%;">게시판</th>
+            {% endif %}
+            <th class="title" style="width: 50%;">제목</th>
+            <th class="author" style="width: 7%;">글쓴이</th>
+            <th class="date" style="width: 10%;">날짜</th>
+            <th class="hit" style="width: 7%;">조회</th>
+            <th class="like" style="width: 6%;">추천</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for article in article_list %}
+          <tr class="{% if article.category.name == "공지사항" and ctg_selected == None %}ctg_notice{% endif %}">
+            {% if ctg_selected == None %}
+            <td class="ctg">{{ article.category.name }}</td>
+            {% endif %}
+            <td class="title">
+                <a href="{% url 'board:article_detail' article.pk %}">{{ article.title }} </a>
+                <a style="color: black;">[{{ article.comment_set.count }}]</a>
+            </td>
+            <td class="author">{{ article.author }}</td>
+            <td class="date">{{ article.created_at|date:'y.m.d' }}</td>
+            <td class="hit">$0.87</td>
+            <td class="like">{{ article.liker_set.count }}</td>
+          </tr>
+        {% empty %}
+        <tr>
+            {% if ctg_selected == None %}
+            <td></td>
+            <td class="title">게시판에 글이 없습니다.</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            {% else %}
+            <td class='title'>게시판에 글이 없습니다.</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{% url 'board:article_create' club.pk %}"class="btn write">글 작성</a>
+<div class="page">
+    <ul class="pagination">
+        <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+        <li class="waves-effect"><a href="#!">1</a></li>
+        <li class="waves-effect"><a href="#!">2</a></li>
+        <li class="waves-effect"><a href="#!">3</a></li>
+        <li class="waves-effect"><a href="#!">4</a></li>
+        <li class="waves-effect"><a href="#!">5</a></li>
+        <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+    </ul>
+</div>

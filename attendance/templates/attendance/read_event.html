@@ -1,0 +1,17 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_key.png"/>출결 관리 : {{ event.title }} </p>
+<div class="divider"></div>
+
+<p> {{ event.event_at }}</p>
+<h5>결석자</h5>
+{% for absent_member in event.absent_member.all %}
+<p>{{ absent_member.user }}</p>
+{% empty %}
+<p>결석자가 없습니다.</p>
+{% endfor %}
+
+<a class="btn" href="{% url 'attendance:event_list' club.pk %}">목록으로</a>
+{% endblock %}

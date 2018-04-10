@@ -1,0 +1,34 @@
+{% extends 'non_admin_base.html' %}
+
+{% block non_admin_content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkey.png"/>회원 명부</p>
+<div class="divider"></div>
+
+
+<div id='member_wrapper'>
+    <div style="width:80%; text-align:center; margin:auto; margin-top:20px; border:groove; padding:20px;">
+        <table>
+            <tr>
+                <th>이름</th>
+                <th>아이디</th>
+                <th>이메일</th>
+                <th>학교</th>
+                <th>회원등급</th>
+            </tr>
+            {% for member in all_member %}
+            <tr>
+                <td>{{ member.user.last_name }} {{ member.user.first_name }}</td>
+                <td>{{ member.user }}</td>
+                <td>{{ member.user.email }}</td>
+                <td>{{ member.user.profile.school }}</td>
+                <td>
+                {% if member.is_admin is True %}관리자{% else %}일반회원{% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+      </div>
+
+{% endblock %}

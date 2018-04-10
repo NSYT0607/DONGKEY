@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="col s8 l12" style="text-align:center;">
+    <a id="main-title"  href="{% url 'core:main_page' %}">DONGKey</a>
+</div>
+<div class="carousel carousel-slider center" data-indicators="true">
+    <div class="carousel-item orange white-text" style="padding: 50px 0; background-image: url('/static/img/cowork1.jpg'); background-repeat: no-repeat; background-size: 100%;" href="#one!">
+        <h2>환영합니다!</h2>
+        <p class="white-text">DONGKey는 최적화된 동아리 관리 서비스를 제공합니다</p>
+    </div>
+    <div class="carousel-item orange white-text" style="padding: 50px 0;" href="#two!">
+        <h2>지원자 관리부터 기존 회원 관리까지</h2>
+        <p class="white-text">DONGKey는 리크루팅 단계에서부터 얻은 지원자의 정보를</p>
+        <p class="white-text">회원 명부에까지 손쉽게 공유할 수 있는 서비스를 지원합니다</p>
+    </div>
+    <div class="carousel-item orange white-text" style="padding: 50px 0;" href="#three!">
+        <h2>출결과 예산 관리를 한번에</h2>
+        <p class="white-text">출결 관리와 그에 따른 벌점 관리가 한번에 가능하고</p>
+        <p class="white-text">예산 관리 시 영수증 이미지 파일을 손쉽게 첨부할 수 있습니다</p>
+    </div>
+    <div class="carousel-item orange white-text" style="padding: 50px 0;" href="#four!">
+        <h2>DONGKey와 함께 쉽고 빠르게 동아리 관리를 한 번에 끝내 보세요!</h2>
+    </div>
+</div>
+<script>
+    $('.carousel.carousel-slider').carousel({fullWidth: true});
+</script>
+<br/><br/><br/><br/>
+
+<form class="search-set" method='GET' enctype="multipart/form-data">
+    <input id='search-form' type='text' name='q'
+           value='{{ q }}' placeholder="동아리 이름을 검색해보세요" />
+    <button class="btn" id="search-btn" type='submit'>동아리 찾기</button>
+</form>
+{% if search_result %}
+
+    {% for club in search_result %}
+<ul>
+    <li>
+        {% if club.is_member %}
+            <h3><a href="{% url 'club:read_non_admin_club' club.name %}">{{ club.name }}</a></h3>
+            <p>{{ club.description }}</p>
+            <p>이미 가입된 동아리입니다.</p>
+        {% else %}
+            {% if club.is_applied %}
+                <h3><a href="{% url 'club:read_non_admin_club' club.name %}">{{ club.name }}</a></h3>
+                <p>{{ club.description }}</p>
+                <p>이미 신청된 동아리입니다.</p>
+            {% else %}
+                <h3><a href="{% url 'club:read_non_admin_club' club.name %}">{{ club.name }}</a></h3>
+                <p>{{ club.description }}</p>
+                <form method='POST' action="{% url 'club:apply_club' club.name %}">
+                  {% csrf_token %}
+                  <button type='submit'>apply</button>
+                </form>
+            {% endif %}
+
+        {% endif %}
+    </li>
+</ul>
+{% endfor %}
+
+{% endif %}
+{% if q and not search_result %}
+<p id="nothing-to-search-text">검색 결과가 없습니다</p>
+
+{% endif %}
+{% endblock %}

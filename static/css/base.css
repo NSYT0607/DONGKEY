@@ -1,0 +1,75 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.dropdown-button{
+    background-color: orangered;
+}
+
+.menu-help-text{
+    margin: 10px 0;
+}
+
+.btn, .btn:hover {
+   background-color: orangered;
+}
+
+.menu-key-icon{
+    width: 30px;
+    height: 40px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.menu-title-text{
+    font-weight:bold;
+    color:orangered;
+    font-size: 30px;
+    margin: 0 0 10px;
+}
+
+.dropdown-content li>a{
+    color: orangered;
+}
+
+.base_menu_item{
+    font-weight: bold;
+    text-align: center;
+    color: orangered;
+}
+
+.background{
+    background-color: orangered;
+}
+
+.side-nav strong{
+    margin-left: 30px;
+}
+
+#navigato{
+    background-color: orangered;
+}
+
+.icon-dongkey{
+    width: 35px;
+    height: 40px;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    vertical-align: middle;
+}
+
+.icon-key{
+    width: 30px;
+    height: 40px;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    vertical-align: middle;
+}

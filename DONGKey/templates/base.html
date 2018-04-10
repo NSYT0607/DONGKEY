@@ -1,0 +1,133 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>DONGKey::동아리 관리의 모든 것</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/main.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/finance.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/manage_member.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/recruiting.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/board.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/attendance.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{% static 'js/ajax_settings.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+</head>
+<style>
+    [type="checkbox"]:not(:checked), [type="checkbox"]:checked,
+    [type="radio"]:not(:checked), [type="radio"]:checked {
+        position: inherit;
+        left:0;
+        opacity: 1;
+        pointer-events: auto;
+        }
+</style>
+<body>
+    <header>
+        <nav id="navigato">
+            <div class="nav-wrapper" >
+                <a href="{% url 'core:main_page' %}" class="brand-logo center">
+                    <img class="icon-dongkey" src="{% static 'img/white_donkeyandkey.png' %}" /></a>
+                <ul id="slide-out" class="side-nav">
+                    {% if request.user.is_authenticated %}
+                    <li>
+                        <div class="user-view">
+                            <div class="background"></div>
+                            <span class="white-text name">{{ request.user }}님, 반가워요</span>
+                            <span class="white-text email">{{ request.user.email }}</span>
+                        </div>
+                    </li>
+                    <li><a href="{% url 'account:read_profile' request.user.pk %}">내 프로필 보기</a></li>
+                    <li><a href="{% url 'account:logout' %}" style="color:orangered; font-weight: bolder;">로그아웃</a></li>
+                    <li style="background-color: darkorange;">
+                        <strong>내가 관리하는 동아리</strong>
+                    </li>
+                    <li>
+                        <ul>
+                            {% for member in request.user.member_set.all %}
+                            <li class="clublist">
+                                {% if member.is_admin == True  %}
+                                <a href="{% url 'club:read_admin_club' member.club.name  %}">{{ member.club.name }}</a>
+                                {% endif %}
+                            </li>
+                            {% empty %}
+                            {% endfor %}
+                            <li><a href="{% url 'club:create_club' %}"><i class="material-icons">add</i>동아리 만들기</a></li>
+                        </ul>
+                    </li>
+                    <li style="background-color: darkorange;">
+                        <strong>내가 참여하는 동아리</strong>
+                    </li>
+                    <li>
+                        <ul>
+                            {% for member in request.user.member_set.all %}
+                            <li class="clublist">
+                                {% if member.is_admin == False %}
+                                <a href="{% url 'club:read_non_admin_club' member.club.name %}">{{ member.club.name }}</a>
+                                {% endif %}
+                            </li>
+                            {% empty %}
+                            {% endfor %}
+                            <li><a href="{% url 'core:main_page' %}"><i class="material-icons">search</i>동아리 찾기</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                     <li>
+                        <div class="user-view">
+                            <div class="background"></div>
+                            <span class="white-text name">안녕하세요!<br/>로그인 혹은 회원가입을 해 주세요</span>
+                        </div>
+                    </li>
+                    <li><a href="{% url 'account:login' %}">로그인</a></li>
+                    <li><a href="{% url 'account:signup' %}">회원가입</a></li>
+                    {% endif %}
+                </ul>
+                <a href="#" data-activates="slide-out" class="button-collapse left show-on-large" >
+                    <i class="material-icons white-text">menu</i></a>
+                <script>
+                    $(".button-collapse").sideNav();
+                </script>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container" style="margin: 50px auto">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="page-footer background">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">DONGKey::동아리 관리의 모든 것</h5>
+                    <p class="grey-text text-lighten-4"></p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Team CodeXY</h5>
+                    <span>
+                        <a class="grey-text text-lighten-3" href="#!">나상연</a>
+                        <a class="grey-text text-lighten-3" href="#!">박정환</a>
+                        <a class="grey-text text-lighten-3" href="#!">박진혁</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                <span class="grey-text text-lighten-4 left">© 2018 Copyright All Reserved to CodeXY of the 8th Pirogramming</span>
+                <span class="grey-text text-lighten-4 right">본 서비스는 서울대학교 벤쳐기업가경영센터의 지원을 받아 제작되었습니다.</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+{% extends 'non_admin_base.html' %}
+
+{% block non_admin_content %}
+{% load money %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkey.png"/>회계 정보</p>
+
+<div class="divider"></div>
+
+<div class="date_input">
+    <form type="GET" action="{% url 'finance:search_by_date' club.pk %}" class="date_input">
+        <div id="year">{{ dateinput_form.year }}</div>
+        <div id="month">{{ dateinput_form.month }}</div>
+        <button id="date_btn" type="submit" class="btn" style="margin-left: 10px;">검색<button>
+    </form>
+</div>
+<div class="search_by_date">
+    <li>회계 총 잔액: {{ club.accounting.account_sum|won }}</li>
+    <li>최근 20개 항목</li>
+    {% include 'finance/non_admin_search_by_date.html' %}
+</div>
+
+<script>
+    $('.date_input').submit(function(e) {
+        e.preventDefault();
+        var year = $('#year').find('li.selected').children().text();
+        var month = $('#month').find('li.selected').children().text();
+
+        $.get('{% url "finance:search_by_date" club.pk %}', {
+            year: year,
+            month: month
+        })
+            .done(function(r) {
+                if (r.success) {
+                    console.log(r.html)
+                    $('.search_by_date').html(r.html);
+                }
+                else {
+                    alert('오류발생');
+                }
+
+            })
+            .fail(function() {
+                alert('치명적 오류 발생');
+            });
+
+    });
+</script>
+<script>
+$(function() {
+    $("#id_income-income_at").datepicker({
+        changeMonth: false,
+        dayNames: ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'],
+        dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'],
+        monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+    });
+});
+</script>
+<script>
+$(function() {
+    $("#id_expd-expd_at").datepicker({
+        changeMonth: false,
+        numberOfMonths: [2,2],
+        dayNames: ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'],
+        dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'],
+        monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월']
+    });
+});
+</script>
+<script>
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+</script>
+{% endblock %}

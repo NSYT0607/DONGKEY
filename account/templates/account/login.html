@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkeyandkey.png"/>
+    로그인</p>
+<div class="divider"></div>
+
+<form method='POST'>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn" type='submit'>로그인</button>
+</form>
+<br/>
+<p>아직 DONGKey의 회원이 아니신가요?</p>
+<a href="{% url 'account:signup' %}" class="btn">가입하기</a>
+{% endblock %}

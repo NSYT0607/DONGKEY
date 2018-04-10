@@ -1,0 +1,74 @@
+{% extends 'non_admin_base.html' %}
+
+{% block non_admin_content %}
+
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkey.png"/>
+    지원하기 : {{ resume.title }}</p>
+<div class="divider"></div>
+
+<div>
+    <form method="POST" class="resume-sample" enctype="multipart/form-data"
+          style="margin: 20px 0 30px; border: 1px solid darkgray; padding: 15px; width:100%;">
+        {% csrf_token %}
+        <span id="resume-title" style="display: block; text-align: center; ">
+            <h4>{{ club.name }} 지원서</h4>
+        </span>
+
+        {% if admin_resume.use_img == True %}
+        <span id="applicant_img">
+            <strong>지원서 사진</strong><br/>
+            {{ applicant_resume_form }}
+        </span>
+        {% endif %}
+
+        <table>
+            <tr>
+                <td>이름</td><td>{{ request.user }}</td>
+            </tr>
+            <tr>
+                <td>이메일</td><td>{{ request.user.email }}</td>
+            </tr>
+            <tr>
+                <td>전화번호</td><td>{{ request.user.profile.phone_number }}</td>
+            </tr>
+            <tr>
+                <td>학교</td><td>{{ request.user.profile.school }}</td>
+            </tr>
+            <tr class="question_list">
+            {% for short_answer_form in short_answer_formset %}
+                <td>{{ short_answer_form.question.content }}</td>
+                <td>{{ short_answer_form }}</td>
+            {% endfor%}
+            </tr>
+        </table>
+
+        <br/><br/>
+        <div class="question_list">
+            {% for long_answer_form in long_answer_formset %}
+                <span>
+                    <strong style="font-size: 30px;">Q. {{ long_answer_form.question.content }}</strong>
+                </span><br/>
+                <span>
+                {{ long_answer_form }}
+                </span>
+            {% endfor%}
+        </div>
+        <h3 style="text-align: center;"><strong>{{ resume.bottom_msg }}</strong></h3>
+        <button id="submit_resume_btn" style="display: inline-block;"
+                type="submit" class="btn btn-block">지원서 제출하기</button>
+        <a style="display: inline-block; float:right;" class="btn"
+           href="{% url 'recruiting:admin_resume_list_for_applicant' club.pk %}">
+        지원서 목록으로</a>
+    </form>
+</div>
+<script>
+    $('#submit_resume_btn').click(function(e) {
+        if (!confirm('지원서 제출 시 수정이 불가능합니다. 제출하시겠습니까?')) {
+            return false;
+        }
+    });
+</script>
+
+
+{% endblock %}

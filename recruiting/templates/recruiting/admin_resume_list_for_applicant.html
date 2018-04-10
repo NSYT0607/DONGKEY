@@ -1,0 +1,39 @@
+{% extends 'non_admin_base.html' %}
+
+{% block non_admin_content %}
+
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkey.png"/>지원하기</p>
+<div class="divider"></div>
+
+{% if is_member %}
+<h3>이미 {{ club.name }}의 회원이시네요!</h3>
+<p>이미 회원이시라면 굳이 다시 지원하실 필요가 없습니다!</p>
+<a href="{% url 'club:read_non_admin_club' club.name %}" class="btn">홈으로 돌아가기</a>
+
+{% else %}
+<h6 class="menu-help-text">** 지원서 양식을 선택하면 해당 양식의 지원서를 작성할 수 있습니다.
+이미 지원서를 제출 했다면, 본인이 작성한 지원서를 볼 수 있습니다.</h6>
+
+<div class="collection">
+{% for admin_resume in admin_resume_list %}
+<div class="collection-item">
+    <h2>
+    {% for applicant_resume in admin_resume.applicantresume_set.all %}
+        {% if request.user == applicant_resume.applicant %}
+            <a href="{% url 'recruiting:read_applicant_resume_for_applicant' club.pk applicant_resume.pk %}">
+                {{ admin_resume.title }}</a><br />
+        {% endif %}
+    {% empty %}
+        <a href="{% url 'recruiting:create_applicant_resume' club.pk admin_resume.pk %}">
+            {{ admin_resume.title }}</a><br />
+    {% endfor %}
+    </h2>
+</div>
+{% empty %}
+    <p class="collection-item">작성 가능한 지원서 양식이 없습니다.</p>
+{% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

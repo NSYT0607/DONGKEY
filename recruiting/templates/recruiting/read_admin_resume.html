@@ -1,0 +1,90 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+
+<!--지원서 샘플 영역-->
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_key.png"/>
+    리크루팅 > 지원서관리 : {{ admin_resume.title }}</p>
+<div class="divider"></div>
+
+<div class="resume-sample" style="margin: 20px 0 30px; border: 1px solid darkgray; padding: 15px; width:100%;">
+    <span id="resume-title" style="display: block; text-align: center; ">
+        <h4>{{ club.name }} 지원서</h4>
+    </span>
+
+    <div>
+        <span>
+        {% if admin_resume.use_image == True %}
+            <img class="applicant_img" src="/static/img/orangered_donkey.png"/>
+        {% endif %}
+        </span>
+        <table style="width: 60%">
+            <tr>
+                <td>이름</td><td>{{ request.user.last_name }}{{ request.user.first_name }}</td>
+            </tr>
+            <tr>
+                <td>이메일</td><td>{{ request.user.email }}</td>
+            </tr>
+            <tr>
+                <td>전화번호</td><td>{{ request.user.profile.phone_number }}</td>
+            </tr>
+            <tr>
+                <td>학교</td><td>{{ request.user.profile.school }}</td>
+            </tr>
+        </table>
+        <table style="width: 60%" class="short_question_list">
+            {% for question in admin_resume.question_set.all %}
+                {% if question.is_short_answer == True %}
+                    {% include 'recruiting/question.html' %}
+                {% endif %}
+            {% endfor%}
+        </table>
+
+    </div>
+    <span class="long_question_list">
+        {% for question in admin_resume.question_set.all %}
+            {% if question.is_short_answer == False %}
+                {% include 'recruiting/question.html' %}
+            {% endif %}
+        {% endfor%}
+    </span>
+    <h3 style="text-align: center;"><strong>{{ admin_resume.bottom_msg }}</strong></h3>
+    <h6 style="text-align:right; margin-top: 50px;" class="menu-help-text">
+        **기본 인적사항은 본인의 기본 정보 및 프로필에 따라 자동으로 기입됩니다.</h6>
+</div>
+<!--지원서 샘플 영역 끝-->
+
+<!--질문추가 영역-->
+<div class="question-add" style="margin: 20px 0; padding: 20px; border: 2px orangered solid; padding:20px; width:100%;">
+    <p class="menu-title-text">{{ admin_resume.title }}에 항목 추가</p>
+    <form id="question_form" method="POST">
+        {% csrf_token %}
+        {{ question_form.as_p }}
+        <button style="display:block;" type="submit" class="btn">항목 추가하기</button>
+    </form>
+    <script>
+        $('#question_form').submit(function(e) {
+            e.preventDefault();
+            var url = '{% url "recruiting:create_question" club.pk admin_resume.pk %}';
+
+            $.post(url, $(this).serialize())
+                .done(function(r) {
+                    if($('#id_question-is_short_answer:checked').val() == null){
+                        $('.long_question_list').append(r);
+                    }
+                    else{
+                        $('.short_question_list').append(r);
+                    }
+                })
+                .fail(function(r) {
+                    alert('오류났어요ㅠ');
+                });
+        })
+    </script>
+</div>
+<!--질문추가 영역 끝-->
+
+<!--지원자 지원서 보러가기-->
+<a class="btn" href="{% url 'recruiting:read_applicant_resume_list' club.pk admin_resume.pk%}">지원자 목록 보러가기</a>
+{% endblock %}

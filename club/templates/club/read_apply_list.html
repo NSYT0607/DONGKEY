@@ -1,0 +1,36 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+<div>
+    <p class="menu-title-text">
+        <img class="menu-key-icon" src="/static/img/orangered_key.png"/>회원 승인</p>
+
+    <div id='apply_list'>
+        {% for list in apply_list %}
+            <div>
+                {{ list.user.last_name }}{{ list.user.first_name }} ({{ list.user }})&nbsp;&nbsp;&nbsp;
+                <form style='display: inline-block;' method="POST" action="{% url 'club:admit' list.club.name list.user.pk %}">
+                    {% csrf_token %}
+                    <button type='submit'>admit</button>
+                </form>
+            </div>
+        {%empty%}
+        승인 대기 명단이 없어요
+        {% endfor %}
+    </div>
+
+    <br><br><br><br>
+    member list<br>
+    ----------------------
+    <div id='member_list'>
+        {% for member in member_list %}
+            {{ member.user.last_name }}{{ member.user.first_name }} ({{ member.user }})<br>
+        {% empty %}
+            no club member
+        {% endfor %}
+    </div>
+
+    <hr>
+
+</div>
+{% endblock %}

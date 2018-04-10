@@ -1,0 +1,31 @@
+{% if question.is_short_answer == True %}
+<tr>
+    <td>
+        <h6>{{ question.content }}</h6>
+        <a href="{% url 'recruiting:update_question' question.pk %}" target="popup"
+           onclick="window.open('{% url 'recruiting:update_question' question.pk  %}',
+                   'popup','width=2000,height=1000'); return false;">
+            <i class="material-icons">edit</i></a>
+            <a style="display:inline-block;" href="{% url 'recruiting:delete_question' question.pk%}">
+                <i class="material-icons">delete_forever</i></a>
+    </td>
+    <td>
+        <input>
+    </td>
+</tr>
+{% else %}
+    <h4>Q. {{ question.content }}</h4>
+    <span style="float: right; margin-bottom: 10px;">
+        <a href="{% url 'recruiting:update_question' question.pk  %}" target="popup"
+           onclick="window.open('{% url 'recruiting:update_question' question.pk  %}',
+                   'popup','width=400,height=300'); return false;">
+            <i class="material-icons">edit</i></a>
+        <a style="display:inline-block;" href="{% url 'recruiting:delete_question' question.pk%}">
+            <i class="material-icons">delete_forever</i></a>
+    </span>
+     <input style="height: 100px; border: 1px solid black;"> </input>
+{% endif %}
+
+
+
+

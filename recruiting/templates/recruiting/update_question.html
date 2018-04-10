@@ -1,0 +1,60 @@
+{% load static %}
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>질문 수정하기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />
+    <link href="{% static 'css/base.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/main.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/finance.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/recruiting.css' %}?ver=1.0" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{% static 'js/ajax_settings.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+</head>
+<style>
+    [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        left:0;
+        opacity: 1;
+        pointer-events: auto;
+        }
+</style>
+<body>
+    <div class="row">
+      <div>
+        <form method="POST" enctype="multipart/form-data" onsubmit="return closeSelf()">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button class="btn" type="submit">질문 수정</button>
+        </form>
+      </div>
+    </div>
+    <script>
+        function closeSelf(){
+            var url = '{% url "recruiting:update_question" form.instance.pk %}';
+
+            $.post(url)
+                .done(function(r) {
+                        self.close();
+                        return true;
+                })
+                .fail(function(r) {
+                    alert('오류났어요ㅠ');
+                })
+        }
+
+        window.onunload = refreshParent;
+        function refreshParent() {
+            window.opener.location.reload();
+        }
+    </script>
+</body>
+</html>

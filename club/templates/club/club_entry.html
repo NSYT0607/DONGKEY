@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkeyandkey.png"/>
+    새 동아리 만들기</p>
+<div class="divider"></div>
+
+
+<form method='POST' enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ club_form.as_p }}
+  <button class="btn" type='submit'>만들기</button>
+</form>
+{% endblock %}

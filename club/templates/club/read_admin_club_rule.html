@@ -1,0 +1,38 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+<div id='about_club_rule'>
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_key.png"/>회칙 관리</p>
+<div class="divider"></div>
+
+<div style="padding: 10px 0;">
+{% if club_rule %}
+    {% for rule in club_rule %}
+        <h6>{{ rule.main_theme }}</h6>
+        {% if rule.sub_theme is not None %}
+        <ul style="display:inline-block;">
+            <li><label>{{ rule.sub_theme }}</label></li>
+            <li>{{ rule.rule|linebreaks }}</li>
+        </ul>
+        {% else %}
+        <ul style="display:inline-block;">
+            <li >{{ rule.rule|linebreaks }}</li>
+        </ul>
+    {% endif %}
+        <span style="display:inline-block;">
+            <a href="{% url 'club:update_club_rule' club.name rule.pk %}"><i class="material-icons">edit</i></a>
+            <a href="{% url 'club:delete_club_rule' club.name rule.pk %}"><i class="material-icons">delete_forever</i></a>
+        </span><br/>
+  {% endfor %}
+
+{% else %}
+    작성된 회칙이 없습니다.
+{% endif %}
+</div>
+<br>
+<a class="btn" href="{% url 'club:create_club_rule' club.name %}">새 조항 만들기</a>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_key.png"/>회원 관리</p>
+<div class="divider"></div>
+
+<div id='member_wrapper' style="margin-top: 20px;">
+    <div id='member_area'>
+        <h5>회원 명단</h5><br>
+        {% for member in all_member %}
+        <ul>
+            {% if member.is_admin is True %}
+            <li>
+                <p>{{ member.user.last_name }} {{ member.user.first_name }} (관리자)</p>
+            </li>
+            {% else %}
+            <li>
+                <p>{{ member.user.first_name }}{{ member.user.last_name }}</p>
+                <form style='display: inline-block;' method='POST' action="{% url 'club:update_is_admin' club.pk member.user.pk %}">
+                {% csrf_token %}
+                <button type='submit' class='btn'>set admin</button>
+                </form>
+            </li>
+            {% endif %}
+        </ul>
+        {% endfor %}
+      </div>
+
+
+  <div id='applicant_area'>
+    <h5>지원자 명단</h5><br>
+    {% if applicant_list %}
+      {% for applicant in applicant_list %}
+        {{ applicant.user.first_name }}{{ applicant.user.last_name }}&nbsp;&nbsp;&nbsp;
+        <form style='display: inline-block;' method="POST" action="{% url 'club:admit' club.pk applicant.user.pk %}">
+          {% csrf_token %}
+          <button type='submit' class='btn'>승인</button>
+        </form>
+      {% endfor %}
+    {% else %}
+      지원자가 없습니다.
+    {% endif %}
+  </div>
+</div>
+
+<!--<form method='POST' action="{% url 'club:exit_club' club.pk request.user.pk %}">
+  {% csrf_token %}
+  <button type='submit' class='btn'>exit club</button>
+</form>-->
+
+{% endblock %}

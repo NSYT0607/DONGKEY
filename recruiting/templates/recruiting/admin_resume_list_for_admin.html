@@ -1,0 +1,23 @@
+{% extends 'admin_base.html' %}
+
+{% block admin_content %}
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_key.png"/>리크루팅</p>
+<div class="divider"></div>
+
+<h6 class="menu-help-text">** 지원서 양식을 선택하면 해당 지원서 양식에 대한 수정 및 삭제와 지원자 관리가 가능합니다.</h6>
+
+<div class="collection">
+    {% for resume in resume_list %}
+    <div class="collection-item">
+        <h2><a href="{% url 'recruiting:read_admin_resume' club.pk resume.pk %}">{{ resume.title }}</a><br /></h2>
+        <span>{{ resume.created_at }}에 작성</span>
+    </div>
+    {% empty %}
+        <p class="collection-item">아직 만들어진 지원서 양식이 없습니다.</p>
+    {% endfor %}
+</div>
+
+<a href="{% url 'recruiting:create_admin_resume' club.pk %}">
+    <button class="btn">새 지원서 양식 만들기</button></a>
+{% endblock %}

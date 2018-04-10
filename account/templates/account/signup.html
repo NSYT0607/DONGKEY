@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkeyandkey.png"/>
+    DONGKey 회원가입</p>
+<div class="divider"></div>
+
+<form method='POST'>
+    {% csrf_token %}
+    {{ signup_form.as_p }}
+    {{ profile_form.as_p }}
+  <button class="btn" type='submit'>가입하기</button>
+</form>
+{% endblock %}

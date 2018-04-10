@@ -1,0 +1,20 @@
+#member_wrapper{
+    /*line-height: top;*/
+
+}
+
+#member_area{
+    display: inline-block;
+    border: groove;
+    width: 49%;
+    padding: 20px;
+    margin: auto;
+}
+
+#applicant_area{
+    display: inline-block;
+    border: groove;
+    width: 49%;
+    vertical-align: top;
+    padding: 20px;
+}

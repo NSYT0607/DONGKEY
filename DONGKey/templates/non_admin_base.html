@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+ <div style="margin-bottom: 10px;">
+    <div style="display: block;">
+        <a href="{% url 'club:read_non_admin_club' club.name %}"><span style="font-size: 50px; color: orangered; display: block;">
+            <img class="club_emblem-dongkey" src="/static/img/orangered_donkeyandkey.png" />{{ club.name }}</span></a>
+        {% if club.description %}
+        <p>{{ club.description }}</p>
+        {% else %}
+        <p>{{ club.name }}에 오신 것을 환영합니다!</p>
+        {% endif %}
+    </div>
+
+
+    <div style="text-align: right;">
+        <a class='dropdown-button btn' href='#' data-activates='dropdown1'>메뉴
+            <i class="material-icons" style="vertical-align: middle; color:white;">arrow_drop_down</i></a>
+
+        <ul id='dropdown1' class='dropdown-content'>
+            <li><a class="base_menu_item" href="{% url 'club:read_non_admin_club' club.name %}">홈</a></li>
+            <li><a href="{% url 'club:read_non_admin_club_rule' club.name %}" class="base_menu_item">회칙</a></li>
+            <li><a href="{% url 'club:member_list_for_non_admin' club.pk %}" class="base_menu_item">
+                회원명부</a></li>
+            <li><a href="{% url 'attendance:non_admin_event_list' club.pk %}" class="base_menu_item">
+                출결 확인</a></li>
+            <li><a href="{% url 'finance:non_admin_club_accounting' club.pk %}" class="base_menu_item">
+                회계 정보</a></li>
+            <li><a href="{% url 'recruiting:admin_resume_list_for_applicant' club.pk %}" class="base_menu_item">
+                지원하기</a></li>
+        </ul>
+    </div>
+</div>
+    {% block non_admin_content %}{% endblock %}
+{% endblock %}

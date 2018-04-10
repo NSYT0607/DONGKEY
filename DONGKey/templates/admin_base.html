@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div style="margin-bottom: 10px;">
+    <div>
+        <a href="{% url 'club:read_admin_club' club.name %}"><span style="font-size: 50px; color: orangered; display: block;">
+            <img class="club_emblem-dongkey" src="/static/img/orangered_donkeyandkey.png" />{{ club.name }}</span></a>
+        <p style="color: orangered; font-weight: bolder;">관리자 모드
+            <a class="right" href="{% url 'club:read_non_admin_club' club.name %}">회원용 페이지로 이동하기</a></p>
+    </div>
+
+    <div style="text-align: right;">
+        <a class='dropdown-button btn' href='#' data-activates='dropdown1'>관리 메뉴
+            <i class="material-icons" style="vertical-align: middle; color:white;">arrow_drop_down</i></a>
+
+        <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="{% url 'club:read_admin_club' club.name %}" class="base_menu_item">홈</a></li>
+            <li><a href="{% url 'club:update_club' club.pk %}" class="base_menu_item">기본 정보</a></li>
+            <li><a href="{% url 'club:read_admin_club_rule' club.name %}" class="base_menu_item">회칙 관리</a></li>
+            <li><a href="{% url 'club:manage_member' club.pk %}" class="base_menu_item">회원 관리</a></li>
+            <li><a href="{% url 'attendance:event_list' club.pk %}" class="base_menu_item">출결 관리</a></li>
+            <li><a href="{% url 'finance:club_accounting' club.pk %}" class="base_menu_item">회계 관리</a></li>
+            <li><a href="{% url 'recruiting:admin_resume_list_for_admin' club.pk %}"
+                   class="base_menu_item">리크루팅</a></li>
+        </ul>
+    </div>
+</div>
+
+<div>
+    {% block admin_content %}{% endblock %}
+</div>
+{% endblock %}
+

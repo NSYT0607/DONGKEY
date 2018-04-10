@@ -1,0 +1,33 @@
+{% extends 'non_admin_base.html' %}
+
+{% block non_admin_content %}
+
+<p class="menu-title-text">
+    <img class="menu-key-icon" src="/static/img/orangered_donkey.png"/>회칙</p>
+<div class="divider"></div>
+
+<div>
+{% if club_rule %}
+  {% for rule in club_rule %}
+    <label>{{ rule.main_theme }}</label>
+    {% if rule.sub_theme is not None %}
+      <ul>
+        <li>{{ rule.sub_theme }}</li>
+          <ul>
+            {{ rule.rule|linebreaks}}
+          </ul>
+      </ul>
+    {% else %}
+      <ul>
+        {{ rule.rule|linebreaks }}
+      </ul>
+    {% endif %}
+    <br><br><br>
+  {% endfor %}
+
+{% else %}
+    <p>{{ club.name }}의 회칙이 없습니다.</p>
+{% endif %}
+</div>
+
+{% endblock %}
