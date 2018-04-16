@@ -29,7 +29,6 @@ class ClubView(ListView):
         context = super(ClubView, self).get_context_data(**kwargs)
         context['calendar_slug'] = Club.objects.get(pk=self.kwargs['pk']).calendar.slug
         context['club'] = Club.objects.get(pk=self.kwargs['pk'])
-
         return context
 
 
