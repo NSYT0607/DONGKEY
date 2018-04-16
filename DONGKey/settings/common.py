@@ -47,8 +47,9 @@ INSTALLED_APPS = [
     'finance',
     'recruiting',
     'board',
-
-    'schedule'
+  
+    'schedule',
+    'map',
 ]
 
 MIDDLEWARE = [

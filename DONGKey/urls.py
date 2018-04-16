@@ -15,9 +15,9 @@ urlpatterns = [
     path('attendance/', include('attendance.urls', namespace='attendance')),
     path('recruiting/', include('recruiting.urls', namespace='recruiting')),
     path('board/', include('board.urls', namespace='board')),
-
     url(r'^api/occurrences', api_occurrences, name='api_occurrence'),
     path('schedule/', include('schedule.urls')),
+    path('map/', include('map.urls', namespace='map')),
 ]
 
 if settings.DEBUG:

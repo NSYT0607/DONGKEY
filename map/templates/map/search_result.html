@@ -1,0 +1,132 @@
+<div id="result" class="collection"style="margin-top: 5px; width:480px; height:250px; overflow:auto; overflow-x:hidden;">
+    {% for place in data %}
+    <a id="a_result" class="collection-item" href="{% url 'map:return_coord' place.mapx place.mapy %}">
+        <ul style="margin: 0px 0px;">
+            <li id="title" style="color:black; font-weight: bold;">{{ place.title }}</li>
+            <li id="address" style="color:#999; font-size: 12px;">{{ place.address }}</li>
+            <li id="road_address" class="hidden" style="display: none;">
+            {{ place.roadAddress }}
+            </li>
+        </ul>
+    </a>
+    {% endfor %}
+    <script>
+        // 문자열 Formatting하는 함수 사용법: "{0}".format(변수)
+        String.prototype.format = function() {
+            var theString = this;
+
+            for (var i = 0; i < arguments.length; i++) {
+                var regExp = new RegExp('\\{' + i + '\\}', 'gm');
+                theString = theString.replace(regExp, arguments[i]);
+            }
+
+            return theString;
+        }
+    </script>
+    <script>
+        $('a#a_result').click(function(e) {
+            e.preventDefault();
+            $('#map').empty();
+            var self = $(this);
+            var url = self.attr('href');
+
+            $.get(url)
+                .done(function(r) {
+                    if(r.success) {
+                        var new_place =new naver.maps.Point(r.mapx, r.mapy);
+
+                        var mapOptions = {
+                            center: new naver.maps.TransCoord.fromTM128ToLatLng(new_place),
+                            zoomControl: true,
+                            zoomControlOptions: {
+                            style: naver.maps.ZoomControlStyle.SMALL,
+                            position: naver.maps.Position.TOP_RIGHT
+                            },
+                            zoom: 10,
+                            mapTypeId: naver.maps.MapTypeId.NORMAL
+                        };
+
+                        var map = new naver.maps.Map('map', mapOptions);
+
+                        var marker = new naver.maps.Marker({
+                            position: new naver.maps.TransCoord.fromTM128ToLatLng(new_place),
+                            map: map
+                        });
+
+                        naver.maps.Event.addListener(map, 'click', function(e) {
+                            marker.setPosition(e.latlng);
+                            var tm128 = naver.maps.TransCoord.fromLatLngToTM128(e.latlng);
+                            var contentString = [
+                                '<div class="iw_inner" style="padding: 5px; 5px;">',
+                                '   <div style="display: inline-block;">',
+                                '      <span class="text">이 위치를 선택</span>',
+                                '   </div>',
+                                '   <a href="#"><i class="small material-icons">add_location</i></a>',
+                                '</div>'
+                            ].join('');
+
+                            var infowindow = new naver.maps.InfoWindow({
+                            content: contentString,
+                            backgroundColor: "#eee",
+                            borderColor: "#2db400",
+                            borderWidth: 2,
+                            anchorColor: "#eee",
+                            anchorSize: {width: 10, height: 11},
+                        });
+
+                            naver.maps.Event.addListener(marker, "click", function(e) {
+                                if (infowindow.getMap()) {
+                                    infowindow.close();
+                                } else {
+                                    infowindow.open(map, marker);
+                                }
+                            });
+
+                            infowindow.open(map, marker);
+
+                        });
+
+                        var contentString = [
+                                '<div style="padding: 5px; 5px;">',
+                                '  <div style="display: inline-block;">',
+                                '    <div>',
+                                '      <strong class="text">이 위치를 선택</strong>',
+                                '      <a href="#"><i class="small material-icons">add_location</i></a>',
+                                '      <br />',
+                                '    </div>',
+                                '  </div>',
+                                '</div>'
+                            ].join('');
+
+                        var infowindow = new naver.maps.InfoWindow({
+                            content: contentString,
+                            backgroundColor: "#eee",
+                            borderColor: "#2db400",
+                            borderWidth: 2,
+                            anchorColor: "#eee",
+                            anchorSize: {width: 10, height: 11}
+                        });
+
+                        naver.maps.Event.addListener(marker, "click", function(e) {
+                            if (infowindow.getMap()) {
+                                infowindow.close();
+                            } else {
+                                infowindow.open(map, marker);
+                            }
+                        });
+
+                        infowindow.open(map, marker);
+
+                    }
+                    else {
+                        alert('첫 번째 오류 발생');
+                    }
+
+                })
+                .fail(function() {
+                    alert('두 번째 오류 발생');
+                });
+            });
+    </script>
+</div>
+
