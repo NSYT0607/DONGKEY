@@ -1,8 +1,9 @@
 from django.db import models
 from django.dispatch import receiver
 from django.conf import settings
+from schedule.models import Calendar
+
 from finance.models import Accounting
-from django.core.signals import request_finished
 
 
 class Club(models.Model):
@@ -21,7 +22,7 @@ class Club(models.Model):
             blank=True,
             null=True,
         )
-
+    calendar = models.OneToOneField(Calendar, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
 

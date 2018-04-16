@@ -4,6 +4,9 @@ from django.urls import reverse
 from django.conf import settings
 from django.http import HttpResponse
 from django.db.models import Q
+from django.views.generic import ListView
+from django.views.generic.base import ContextMixin, TemplateView
+from schedule.models import Calendar
 
 from .models import ApplyList
 from .models import Club
@@ -12,20 +15,39 @@ from .forms import ClubForm
 from .forms import ClubRuleForm
 from member.models import Member
 from board.models import Article, Category
-# Create your views here.
+
+
+class ClubView(ListView):
+    template_name = 'club/admin_club.html'
+    context_object_name = 'notice_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        return Article.objects.filter(club__pk=self.kwargs['pk']).order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super(ClubView, self).get_context_data(**kwargs)
+        context['calendar_slug'] = Club.objects.get(pk=self.kwargs['pk']).calendar.slug
+        context['club'] = Club.objects.get(pk=self.kwargs['pk'])
+
+        return context
 
 
 @login_required
 def create_club(request):
     club_form = ClubForm(request.POST or None)
     if request.method == 'POST' and club_form.is_valid():
-        club = club_form.save()
+        club = club_form.save(commit=False)
+        calendar = Calendar.objects.create(name=club.name, slug=club.name)
+        club.calendar = calendar
+        club.save()
         member = Member.objects.create(
                 club=club,
                 user=request.user,
                 is_admin=True,
             )
         member.save()
+
         return redirect(reverse('club:read_admin_club', kwargs={'club': club.name, }))
     ctx = {
         'club_form': club_form,
@@ -56,6 +78,7 @@ def read_admin_club(request, club, ctg_pk=None):
         'club': club,
         'notice_list': notice_list,
         'admin': admin,
+        'calendar_slug' : club.calendar.slug,
     }
     return render(request, 'club/admin_club.html', ctx)
 
