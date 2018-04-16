@@ -1,7 +1,9 @@
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from schedule.views import api_occurrences
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,6 +15,8 @@ urlpatterns = [
     path('attendance/', include('attendance.urls', namespace='attendance')),
     path('recruiting/', include('recruiting.urls', namespace='recruiting')),
     path('board/', include('board.urls', namespace='board')),
+    url(r'^api/occurrences', api_occurrences, name='api_occurrence'),
+    path('schedule/', include('schedule.urls')),
     path('map/', include('map.urls', namespace='map')),
 ]
 

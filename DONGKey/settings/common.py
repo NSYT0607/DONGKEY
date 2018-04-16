@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'finance',
     'recruiting',
     'board',
+  
+    'schedule',
     'map',
 ]
 

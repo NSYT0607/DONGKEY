@@ -8,6 +8,8 @@ urlpatterns = [
     path('update/<int:club_pk>', views.update_club, name='update_club'),
 
     path('read_admin_club/<str:club>/<int:ctg_pk>/', views.read_admin_club, name='read_admin_club_ctg'),
+
+    path('<int:pk>/', views.ClubView.as_view(), name='club_view'),
     path('read_admin_club/<str:club>/', views.read_admin_club, name='read_admin_club'),
     path('read_non_admin_club/<str:club>/<int:ctg_pk>/', views.read_non_admin_club, name='read_non_admin_club_ctg'),
     path('read_non_admin_club/<str:club>/', views.read_non_admin_club, name='read_non_admin_club'),

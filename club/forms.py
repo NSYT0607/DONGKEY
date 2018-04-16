@@ -7,7 +7,7 @@ from .models import ClubRule
 class ClubForm(forms.ModelForm):
     class Meta:
         model = Club
-        fields = '__all__'
+        exclude = ('calendar',)
 
     # def save(self, commit=True):
     #     club = super().save(commit=False)
