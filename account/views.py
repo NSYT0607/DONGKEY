@@ -18,14 +18,12 @@ from .forms import (
 
 def login(request):
     form = AuthForm(request, request.POST or None)
-    next_url = reverse('core:main_page')
+    next_url = request.GET.get('next') or reverse('core:mainpage')
     if request.user.is_authenticated:
-        return redirect(next_url)
+        return redirect('core:main_page')
     else:
         if request.method == 'POST' and form.is_valid():
             auth_login(request, form.get_user())
-            # next_url = request.GET.get('next') or settings.LOGIN_REDIRECT_URL
-            # next_url = settings.LOGIN_REDIRECT_URL
             return redirect(next_url)
         ctx = {
             'form': form,
