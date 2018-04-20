@@ -1,14 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST">
+<form id="article_create"method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn">작성</button>
+
+    <div class="coord_result">
+        <span>위치 정보 들어갈 자리</span>
+    </div>
+      <!-- Modal Trigger -->
+     <a class="waves-effect waves-light btn modal-trigger" href="#modal1">위치</a>
+      <!-- Modal Structure -->
+     <div id="modal1" class="modal" style="top: 4%; max-height: 95%">
+         <div class="modal-content" style="padding: 10px;">
+        {% include 'map/map.html' %}
+         </div>
+     </div>
+
+    <br/>
+    <br/>
 </form>
+<button type="submit" form="article_create" class="btn">작성</button>
 <script>
   $(document).ready(function() {
     $('select').material_select();
+    $('.modal').modal();
   });
 </script>
+<script>
+  $(document).ready(function() {
+    $("#add_location").click(function(e) {
+        alert('이벤트');
+        e.preventDefault();
+        var self = $(this);
+        var url = self.attr('href');
+
+        $.get(url)
+            .done(function(r) {
+                if (r.success) {
+                    console.log(r.mapx);
+                }
+                else {
+                    alert('오류');
+                }
+            })
+            .fail(function() {
+                alert('두 번째 오류');
+            });
+    });
+  });
+</script>
+
 {% endblock %}

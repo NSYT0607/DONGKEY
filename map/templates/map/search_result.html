@@ -34,6 +34,7 @@
                 .done(function(r) {
                     if(r.success) {
                         var new_place =new naver.maps.Point(r.mapx, r.mapy);
+                        console.log(r.mapx, r.mapy);
 
                         var mapOptions = {
                             center: new naver.maps.TransCoord.fromTM128ToLatLng(new_place),
@@ -55,16 +56,17 @@
 
                         naver.maps.Event.addListener(map, 'click', function(e) {
                             marker.setPosition(e.latlng);
-                            var tm128 = naver.maps.TransCoord.fromLatLngToTM128(e.latlng);
+                            var new_tm128 = naver.maps.TransCoord.fromLatLngToTM128(e.latlng);
+                            console.log(new_tm128);
+
                             var contentString = [
                                 '<div class="iw_inner" style="padding: 5px; 5px;">',
                                 '   <div style="display: inline-block;">',
                                 '      <span class="text">이 위치를 선택</span>',
                                 '   </div>',
-                                '   <a href="#"><i class="small material-icons">add_location</i></a>',
+                                '   <a href="/search/{0}/{1}/" id="add_location"><i class="small material-icons">add_location</i></a>',
                                 '</div>'
-                            ].join('');
-
+                            ].join('').format(new_tm128.x, new_tm128.y);
                             var infowindow = new naver.maps.InfoWindow({
                             content: contentString,
                             backgroundColor: "#eee",
@@ -91,12 +93,12 @@
                                 '  <div style="display: inline-block;">',
                                 '    <div>',
                                 '      <strong class="text">이 위치를 선택</strong>',
-                                '      <a href="#"><i class="small material-icons">add_location</i></a>',
+                                '      <a href="/search/{0}/{1}/" id="add_location"><i class="small material-icons">add_location</i></a>',
                                 '      <br />',
                                 '    </div>',
                                 '  </div>',
                                 '</div>'
-                            ].join('');
+                            ].join('').format(r.mapx, r.mapy);
 
                         var infowindow = new naver.maps.InfoWindow({
                             content: contentString,
