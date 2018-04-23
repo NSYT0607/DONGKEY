@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -17,10 +18,13 @@ from member.models import Member
 from board.models import Article, Category
 
 
-class ClubView(ListView):
+class ClubView(PermissionRequiredMixin, ListView):
     template_name = 'club/admin_club.html'
     context_object_name = 'notice_list'
     paginate_by = 5
+
+    def has_permission(self):
+        return Club.objects.filter(pk=self.kwargs['pk'], member__user=self.request.user).exists()
 
     def get_queryset(self):
         return Article.objects.filter(club__pk=self.kwargs['pk']).order_by('-created_at')

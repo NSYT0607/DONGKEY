@@ -97,7 +97,6 @@ def article_update(request, pk):
     article = get_object_or_404(Article, pk=pk)
     member = request.user.member_set.get(club__pk=article.club.pk)
     form = ArticleForm(member, request.POST or None, instance=article)
-    print(form.instance.coordinate)
     if request.method == "POST" and form.is_valid():
         article = form.save()
         return redirect(article.get_absolute_url())
