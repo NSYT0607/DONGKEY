@@ -34,7 +34,6 @@
                 .done(function(r) {
                     if(r.success) {
                         var new_place =new naver.maps.Point(r.mapx, r.mapy);
-                        console.log(r.mapx, r.mapy);
 
                         var mapOptions = {
                             center: new naver.maps.TransCoord.fromTM128ToLatLng(new_place),
@@ -64,7 +63,7 @@
                                 '   <div style="display: inline-block;">',
                                 '      <span class="text">이 위치를 선택</span>',
                                 '   </div>',
-                                '   <a href="/search/{0}/{1}/" id="add_location"><i class="small material-icons">add_location</i></a>',
+                                '   <button id="add_location" value="{0},{1}" type="button"><i class="small material-icons">add_location</i></button>',
                                 '</div>'
                             ].join('').format(new_tm128.x, new_tm128.y);
                             var infowindow = new naver.maps.InfoWindow({
@@ -86,6 +85,26 @@
 
                             infowindow.open(map, marker);
 
+                            $("#add_location").click(function(e) {
+                                alert('1번')
+                                e.preventDefault();
+                                var self = $(this);
+                                var url = self.attr('value');
+
+                                $.get(url)
+                                    .done(function(r) {
+                                        if (r.success) {
+                                            console.log(r.mapx);
+                                        }
+                                        else {
+                                            alert('오류');
+                                        }
+                                    })
+                                    .fail(function() {
+                                        alert('두 번째 오류');
+                                    });
+                            });
+
                         });
 
                         var contentString = [
@@ -93,7 +112,7 @@
                                 '  <div style="display: inline-block;">',
                                 '    <div>',
                                 '      <strong class="text">이 위치를 선택</strong>',
-                                '      <a href="/search/{0}/{1}/" id="add_location"><i class="small material-icons">add_location</i></a>',
+                                '      <button id="add_location" value="{0},{1}" type="button"><i class="small material-icons">add_location</i></button>',
                                 '      <br />',
                                 '    </div>',
                                 '  </div>',
@@ -118,6 +137,25 @@
                         });
 
                         infowindow.open(map, marker);
+                        $("#add_location").click(function(e) {
+                            alert('2번');
+                            e.preventDefault();
+                            var self = $(this);
+                            var url = self.attr('href');
+
+                            $.get(url)
+                                .done(function(r) {
+                                    if (r.success) {
+                                        console.log(r.mapx);
+                                    }
+                                    else {
+                                        alert('오류');
+                                    }
+                                })
+                                .fail(function() {
+                                    alert('두 번째 오류');
+                                });
+                        });
 
                     }
                     else {
