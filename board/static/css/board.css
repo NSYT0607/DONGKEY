@@ -26,3 +26,37 @@ div.article_list {
 tr.ctg_notice {
     background-color: #f2f2f2;
 }
+#id_coordinate
+{
+    display: none;
+}
+label[for="id_coordinate"] {
+    display: none;
+}
+div.coord_result{
+    width: 500px;
+    height: 152px;
+    border: 1px solid #efefef;
+}
+
+#img_loc {
+    width: 150px;
+    height: 150px;
+    display: inline-table;
+    float: left;
+}
+#address_div {
+    width: 348px;
+    height: 150px;
+    display: inline-table;
+    float: left;
+    padding-left: 5px;
+    padding-top: 30px;
+    background-color: #eeeeee;
+}
+#address_p {
+}
+
+.invisible {
+    display: none;
+}

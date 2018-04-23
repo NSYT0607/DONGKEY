@@ -55,16 +55,17 @@
 
                         naver.maps.Event.addListener(map, 'click', function(e) {
                             marker.setPosition(e.latlng);
-                            var tm128 = naver.maps.TransCoord.fromLatLngToTM128(e.latlng);
+                            var new_tm128 = naver.maps.TransCoord.fromLatLngToTM128(e.latlng);
+                            console.log(new_tm128);
+
                             var contentString = [
                                 '<div class="iw_inner" style="padding: 5px; 5px;">',
                                 '   <div style="display: inline-block;">',
                                 '      <span class="text">이 위치를 선택</span>',
                                 '   </div>',
-                                '   <a href="#"><i class="small material-icons">add_location</i></a>',
+                                '   <button id="add_location" value="{0},{1}" type="button"><i class="small material-icons">add_location</i></button>',
                                 '</div>'
-                            ].join('');
-
+                            ].join('').format(new_tm128.x, new_tm128.y);
                             var infowindow = new naver.maps.InfoWindow({
                             content: contentString,
                             backgroundColor: "#eee",
@@ -84,6 +85,26 @@
 
                             infowindow.open(map, marker);
 
+                            $("#add_location").click(function(e) {
+                                alert('1번')
+                                e.preventDefault();
+                                var self = $(this);
+                                var url = self.attr('value');
+
+                                $.get(url)
+                                    .done(function(r) {
+                                        if (r.success) {
+                                            console.log(r.mapx);
+                                        }
+                                        else {
+                                            alert('오류');
+                                        }
+                                    })
+                                    .fail(function() {
+                                        alert('두 번째 오류');
+                                    });
+                            });
+
                         });
 
                         var contentString = [
@@ -91,12 +112,12 @@
                                 '  <div style="display: inline-block;">',
                                 '    <div>',
                                 '      <strong class="text">이 위치를 선택</strong>',
-                                '      <a href="#"><i class="small material-icons">add_location</i></a>',
+                                '      <button id="add_location" value="{0},{1}" type="button"><i class="small material-icons">add_location</i></button>',
                                 '      <br />',
                                 '    </div>',
                                 '  </div>',
                                 '</div>'
-                            ].join('');
+                            ].join('').format(r.mapx, r.mapy);
 
                         var infowindow = new naver.maps.InfoWindow({
                             content: contentString,
@@ -116,6 +137,25 @@
                         });
 
                         infowindow.open(map, marker);
+                        $("#add_location").click(function(e) {
+                            alert('2번');
+                            e.preventDefault();
+                            var self = $(this);
+                            var url = self.attr('href');
+
+                            $.get(url)
+                                .done(function(r) {
+                                    if (r.success) {
+                                        console.log(r.mapx);
+                                    }
+                                    else {
+                                        alert('오류');
+                                    }
+                                })
+                                .fail(function() {
+                                    alert('두 번째 오류');
+                                });
+                        });
 
                     }
                     else {

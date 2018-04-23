@@ -26,7 +26,6 @@ def place_search(txt):
     if(rescode == 200):
         response_body = response.read()
         data = json.loads(response_body.decode('utf-8'))
-        print(response_body.decode('utf-8'))
         for datum in data['items']:
             datum['title'] = remove_tag(datum['title'])
         ctx = {

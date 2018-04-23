@@ -1,14 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST">
+<form id="article_create"method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn">작성</button>
 </form>
+<br />
+<br />
+
+<div class="coord_result {% if not form.instance.coordinate %}invisible{% endif %}">
+    <div id="location">
+        <a id="img_a" href="http://naver.com"><img id="img_loc" src=""></a>
+    </div>
+    <div id ="address_div">
+        <p id="address_p_title">오잉또잉</p>
+        <p id="address_p_address"></p>
+    </div>
+</div>
+
+<br />
+  <!-- Modal Trigger -->
+ <a class="waves-effect waves-light btn modal-trigger" href="#modal1">위치</a>
+  <!-- Modal Structure -->
+ <div id="modal1" class="modal" style="top: 4%; max-height: 95%">
+     <div class="modal-content" style="padding: 10px;">
+    {% include 'map/map.html' %}
+     </div>
+ </div>
+
+<br/>
+<br/>
+
+<button type="submit" form="article_create" class="btn">작성</button>
 <script>
   $(document).ready(function() {
     $('select').material_select();
+    $('.modal').modal();
   });
+</script>
+<script>
+    var infoArray = $("#id_coordinate").val().split(",");
+    var info_X = infoArray[0];
+    var info_Y = infoArray[1];
+    var info_title = infoArray[2];
+    var info_address = infoArray[3];
+    var info_LatLng_lng = infoArray[4];
+    var info_LatLng_lat = infoArray[5];
+
+    $("#address_p_title").text("{0}".format(info_title));
+    $("#address_p_address").text("{0}".format(info_address));
+    $("#img_loc")
+        .attr("src", "https://openapi.naver.com/v1/map/staticmap.bin?clientId=HgDOpjOFssES9HHhpUyD&url=file://localhost:8000&crs=EPSG:4326&center={0},{1}&level=11&w=150&h=150&baselayer=default&markers={0},{1}".format(info_LatLng_lng, info_LatLng_lat, info_LatLng_lng, info_LatLng_lat));
+    $("#img_a")
+        .attr("href", "http://maps.naver.com/?menu=location&mapMode=0&lat={0}&lng={1}&dlevel=12&enc=b64".format(info_LatLng_lat, info_LatLng_lng));
 </script>
 {% endblock %}

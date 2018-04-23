@@ -1,80 +1,146 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>간단한 지도 표시하기</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=HgDOpjOFssES9HHhpUyD"></script>
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=HgDOpjOFssES9HHhpUyD&submodules=geocoder"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-</head>
-<body>
-<div class="container">
-    <div style="margin-bottom:10px;">
-        <form id="map_search" method="GET" style="display: inline-block;">
-            <i class="small material-icons">search</i>
-            <input name="place" type="text" placeholder="장소 또는 지역 입력" id="search_txt" style="width: 380px"/>
-            <button class="waves-effect waves-light btn"type="submit">검색</button>
-        </form>
-    </div>
-    <script>
-        // 문자열 Formatting하는 함수 사용법: "{0}".format(변수)
-        String.prototype.format = function() {
-            var theString = this;
+<div style="margin-bottom:10px;">
+    <form id="map_search" method="GET" style="display: inline-block;">
+        <i class="small material-icons">search</i>
+        <input name="place" type="text" placeholder="장소 또는 지역 입력" id="search_txt" style="width: 380px"/>
+        <button id="search_btn" class="waves-effect waves-light btn">검색</button>
+    </form>
+</div>
+<!-- 모달창에서 Enter키 눌렀을 때 검색되게 하는 스크립트
+<script>
+  var input = document.getElementById("search_txt");
+ // Execute a function when the user releases a key on the keyboard
+  input.addEventListener("keyup", function(event) {
+  // Cancel the default action, if needed
+  event.preventDefault();
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Trigger the button element with a click
+    document.getElementById("search_btn").click();
+  }
+});
+</script>
+-->
+<script>
+    // 문자열 Formatting하는 함수 사용법: "{0}".format(변수)
+    String.prototype.format = function() {
+        var theString = this;
 
-            for (var i = 0; i < arguments.length; i++) {
-                var regExp = new RegExp('\\{' + i + '\\}', 'gm');
-                theString = theString.replace(regExp, arguments[i]);
-            }
-
-            return theString;
+        for (var i = 0; i < arguments.length; i++) {
+            var regExp = new RegExp('\\{' + i + '\\}', 'gm');
+            theString = theString.replace(regExp, arguments[i]);
         }
-    </script>
-    <!-- 검색결과에 따라 네이버 MAP 받아와서 ajax로 처리하는 스크립트-->
-    <script>
-        $('#map_search').submit(function(e) {
-            e.preventDefault();
-            $('#map').empty();
-            $('#map').css("height", "280px")
-            var place = $('#search_txt').val();
 
-            $.get('{% url "map:map" %}', {
-                place : place
-            })
-                .done(function(r) {
-                    if(r.success) {
-                        $('#result').replaceWith(r.html);
-                        var tm128 = naver.maps.Point(r.First.mapx, r.First.mapy);
+        return theString;
+    }
+</script>
+<!-- 검색결과에 따라 네이버 MAP 받아와서 ajax로 처리하는 스크립트-->
+<script>
+    $('#search_btn').click(function(e) {
+        e.preventDefault();
+        $('#map').empty();
+        $('#map').css("height", "280px")
+        var place = $('#search_txt').val();
 
-                        var mapOptions = {
-                            center: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
-                            zoomControl: true,
-                            zoomControlOptions: {
-                            style: naver.maps.ZoomControlStyle.SMALL,
-                            position: naver.maps.Position.TOP_RIGHT
-                            },
-                            zoom: 10,
-                            mapTypeId: naver.maps.MapTypeId.NORMAL
-                        };
+        $.get('{% url "map:map" %}', {
+            place : place
+        })
+            .done(function(r) {
+                if(r.success) {
+                    $('#result').replaceWith(r.html);
+                    var tm128 = naver.maps.Point(r.First.mapx, r.First.mapy);
+                    var LatLng = naver.maps.TransCoord.fromTM128ToLatLng(tm128)
+                    var LatLng_lng = LatLng.x;
+                    var LatLng_lat = LatLng.y;
 
-                        var map = new naver.maps.Map('map', mapOptions);
+                    var mapOptions = {
+                        center: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
+                        zoomControl: true,
+                        zoomControlOptions: {
+                        style: naver.maps.ZoomControlStyle.SMALL,
+                        position: naver.maps.Position.TOP_RIGHT
+                        },
+                        zoom: 10,
+                        mapTypeId: naver.maps.MapTypeId.NORMAL
+                    };
 
-                        var marker = new naver.maps.Marker({
-                            position: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
-                            map: map
+                    var map = new naver.maps.Map('map', mapOptions);
+
+                    var marker = new naver.maps.Marker({
+                        position: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
+                        map: map
+                    });
+                    var contentString = [
+                            '<div style="padding: 5px; 5px;">',
+                            '  <div style="display: inline-block;">',
+                            '    <strong class="text">이 위치를 선택1</strong>',
+                            '    <button id="add_location" value="{0},{1}" type="button"><i class="small material-icons">add_location</i></button>',
+                            '  </div>',
+                            '</div>'
+                        ].join('').format(r.First.mapx, r.First.mapy);
+
+                    var infowindow = new naver.maps.InfoWindow({
+                        content: contentString,
+                        backgroundColor: "#eee",
+                        borderColor: "#2db400",
+                        borderWidth: 2,
+                        anchorColor: "#eee",
+                        anchorSize: {width: 10, height: 11}
+                    });
+
+                    naver.maps.Event.addListener(marker, "click", function(e) {
+                        if (infowindow.getMap()) {
+                            infowindow.close();
+                        } else {
+                            infowindow.open(map, marker);
+                        }
+                    });
+
+                    infowindow.open(map, marker);
+
+                    $("#add_location").click(function(e) {
+                        var self = $(this);
+                        var coordArray = self.attr('value').split(',');
+                        var coordX = coordArray[0];
+                        var coordY = coordArray[1];
+                        $("input#id_coordinate").val("{0},{1},{2},{3},{4},{5}".format(coordX, coordY, r.First.title, r.First.address, LatLng_lng, LatLng_lat));
+
+                        $("#address_p_title").text("{0}".format(r.First.title));
+                        $("#address_p_address").text("{0}".format(r.First.address));
+                        $(".coord_result").removeClass("invisible");
+                        $("#img_loc")
+                            .attr("src", "https://openapi.naver.com/v1/map/staticmap.bin?clientId=HgDOpjOFssES9HHhpUyD&url=file://localhost:8000&crs=EPSG:4326&center={0},{1}&level=11&w=150&h=150&baselayer=default&markers={0},{1}".format(LatLng_lng, LatLng_lat, LatLng_lng, LatLng_lat));
+                        $("#img_a")
+                            .attr("href", "http://maps.naver.com/?menu=location&mapMode=0&lat={0}&lng={1}&dlevel=12&enc=b64".format(LatLng_lat, LatLng_lng));
+
+
+                        $('.modal').modal('close');
+                    });
+
+                    naver.maps.Event.addListener(map, 'click', function(e) {
+                        marker.setPosition(e.latlng);
+                        var new_tm128 = naver.maps.TransCoord.fromLatLngToTM128(e.latlng);
+                        console.log(new_tm128.x, new_tm128.y);
+
+                        naver.maps.Service.reverseGeocode({
+                            location: new_tm128,
+                            coordType: naver.maps.Service.CoordType.TM128
+                        }, function(status, response) {
+                            if (status !== naver.maps.Service.Status.OK) {
+                                return alert('Something wrong!');
+                            }
+
+                            result = response.result // 검색 결과의 컨테이너
+                            items = result.items; // 검색 결과의 배열
                         });
+
                         var contentString = [
-                                '<div style="padding: 5px; 5px;">',
-                                '  <div style="display: inline-block;">',
-                                '    <strong class="text">이 위치를 선택</strong>',
-                                '    <a href="#"><i class="small material-icons">add_location</i></a>',
-                                '  </div>',
-                                '</div>'
-                            ].join('');
+                            '<div class="iw_inner" style="padding: 5px; 5px;">',
+                            '   <div style="display: inline-block;">',
+                            '      <span class="text">이 위치를 선택2</span>',
+                            '   </div>',
+                            '   <button id="add_location" value="{0},{1}" type="button"><i class="small material-icons">add_location</i></button>',
+                            '</div>'
+                        ].join('').format(new_tm128.x, new_tm128.y);
 
                         var infowindow = new naver.maps.InfoWindow({
                             content: contentString,
@@ -95,79 +161,83 @@
 
                         infowindow.open(map, marker);
 
-                        naver.maps.Event.addListener(map, 'click', function(e) {
-                            marker.setPosition(e.latlng);
-                            var new_tm128 = naver.maps.TransCoord.fromLatLngToTM128(e.latlng);
-                            console.log(new_tm128);
+                        $("#add_location").click(function(e) {
+                            var self = $(this);
+                            var coordArray = self.attr('value').split(',');
+                            var coordX = coordArray[0];
+                            var coordY = coordArray[1];
+                            $("input#id_coordinate").val("{0},{1},{2},{3}".format(coordX, coordY, "없음", items[0].address));
 
-                            var contentString = [
-                                '<div class="iw_inner" style="padding: 5px; 5px;">',
-                                '   <div style="display: inline-block;">',
-                                '      <span class="text">이 위치를 선택</span>',
-                                '   </div>',
-                                '   <a href="/search/{0}/{1}/"><i class="small material-icons">add_location</i></a>',
-                                '</div>'
-                            ].join('').format(new_tm128.x, new_tm128.y);
+                            $("#address_p_title").text("{0}".format("없음"));
+                            $("#address_p_address").text("{0}".format(items[0].address));
 
-                            var infowindow = new naver.maps.InfoWindow({
-                                content: contentString,
-                                backgroundColor: "#eee",
-                                borderColor: "#2db400",
-                                borderWidth: 5,
-                                anchorColor: "#eee",
-                                anchorSize: {width: 10, height: 11}
+                            $(".coord_result").removeClass("invisible");
+
+                            var tm128 = naver.maps.Point(coordX, coordY);
+
+                            var mapOptions = {
+                                center: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
+                                zoomControl: false,
+                                zoom: 9,
+                                scaleControl: false,
+                                logoControl: true,
+                                mapDataControl: false,
+                                mapTypeId: naver.maps.MapTypeId.NORMAL,
+                                scrollWheel: false,
+                                draggable: false,
+                                pinchZoom: false
+
+                            };
+
+                            var map = new naver.maps.Map('location', mapOptions);
+
+                            var marker = new naver.maps.Marker({
+                                position: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
+                                map: map
                             });
 
-                            naver.maps.Event.addListener(marker, "click", function(e) {
-                                if (infowindow.getMap()) {
-                                    infowindow.close();
-                                } else {
-                                    infowindow.open(map, marker);
-                                }
-                            });
 
-                            infowindow.open(map, marker);
-
+                            $('.modal').modal('close');
                         });
-                    }
-                    else {
-                        alert('검색어를 입력하세요.');
-                    }
 
-                })
-                .fail(function() {
-                    alert('두 번째 오류 발생');
-                });
-        });
-    </script>
-    <div id="map" style="width:480px; height:545px;"></div>
-    <!-- 네이버 MAP API -->
-    <script>
-        var tm128 = naver.maps.Point(306406, 551945);
+                    });
+                }
+                else {
+                    alert('검색어를 입력하세요.');
+                }
 
-        var mapOptions = {
-            center: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
-            zoomControl: true,
-            zoomControlOptions: {
-            style: naver.maps.ZoomControlStyle.SMALL,
-            position: naver.maps.Position.TOP_RIGHT
-            },
-            zoom: 10,
-            mapTypeId: naver.maps.MapTypeId.NORMAL
-        };
+            })
+            .fail(function() {
+                alert('두 번째 오류 발생');
+            });
+    });
+</script>
+<div id="map" style="width:450px; height:545px;"></div>
+<!-- 네이버 MAP API -->
+<script>
+    var tm128 = naver.maps.Point(306406, 551945);
 
-        var map = new naver.maps.Map('map', mapOptions);
+    var mapOptions = {
+        center: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
+        zoomControl: true,
+        zoomControlOptions: {
+        style: naver.maps.ZoomControlStyle.SMALL,
+        position: naver.maps.Position.TOP_RIGHT
+        },
+        zoom: 10,
+        mapTypeId: naver.maps.MapTypeId.NORMAL
+    };
 
-        var marker = new naver.maps.Marker({
-            position: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
-            map: map
-        });
+    var map = new naver.maps.Map('map', mapOptions);
 
-        naver.maps.Event.addListener(map, 'click', function(e) {
-            marker.setPosition(e.latlng);
-        });
-    </script>
-    <div id="result"></div>
-</div>
-</body>
-</html>
+    var marker = new naver.maps.Marker({
+        position: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
+        map: map
+    });
+
+    naver.maps.Event.addListener(map, 'click', function(e) {
+        marker.setPosition(e.latlng);
+    });
+</script>
+
+<div id="result"></div>
