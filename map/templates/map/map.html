@@ -112,14 +112,16 @@
                         $("#img_a")
                             .attr("href", "http://maps.naver.com/?menu=location&mapMode=0&lat={0}&lng={1}&dlevel=12&enc=b64".format(LatLng_lat, LatLng_lng));
 
-
                         $('.modal').modal('close');
                     });
 
                     naver.maps.Event.addListener(map, 'click', function(e) {
                         marker.setPosition(e.latlng);
                         var new_tm128 = naver.maps.TransCoord.fromLatLngToTM128(e.latlng);
-                        console.log(new_tm128.x, new_tm128.y);
+                        console.log(e.latlng.x, e.latlng.y);
+
+                        LatLng_lat = e.latlng.y;
+                        LatLng_lng = e.latlng.x;
 
                         naver.maps.Service.reverseGeocode({
                             location: new_tm128,
@@ -166,36 +168,16 @@
                             var coordArray = self.attr('value').split(',');
                             var coordX = coordArray[0];
                             var coordY = coordArray[1];
-                            $("input#id_coordinate").val("{0},{1},{2},{3}".format(coordX, coordY, "없음", items[0].address));
+                            $("input#id_coordinate").val("{0},{1},{2},{3},{4},{5}".format(coordX, coordY, "없음", items[0].address, LatLng_lng, LatLng_lat));
 
                             $("#address_p_title").text("{0}".format("없음"));
                             $("#address_p_address").text("{0}".format(items[0].address));
-
                             $(".coord_result").removeClass("invisible");
 
-                            var tm128 = naver.maps.Point(coordX, coordY);
-
-                            var mapOptions = {
-                                center: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
-                                zoomControl: false,
-                                zoom: 9,
-                                scaleControl: false,
-                                logoControl: true,
-                                mapDataControl: false,
-                                mapTypeId: naver.maps.MapTypeId.NORMAL,
-                                scrollWheel: false,
-                                draggable: false,
-                                pinchZoom: false
-
-                            };
-
-                            var map = new naver.maps.Map('location', mapOptions);
-
-                            var marker = new naver.maps.Marker({
-                                position: new naver.maps.TransCoord.fromTM128ToLatLng(tm128),
-                                map: map
-                            });
-
+                            $("#img_loc")
+                                .attr("src", "https://openapi.naver.com/v1/map/staticmap.bin?clientId=HgDOpjOFssES9HHhpUyD&url=file://localhost:8000&crs=EPSG:4326&center={0},{1}&level=11&w=150&h=150&baselayer=default&markers={0},{1}".format(LatLng_lng, LatLng_lat, LatLng_lng, LatLng_lat));
+                            $("#img_a")
+                                .attr("href", "http://maps.naver.com/?menu=location&mapMode=0&lat={0}&lng={1}&dlevel=12&enc=b64".format(LatLng_lat, LatLng_lng));
 
                             $('.modal').modal('close');
                         });

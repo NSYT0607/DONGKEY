@@ -29,7 +29,6 @@ class Article(models.Model):
         settings.AUTH_USER_MODEL,
         related_name = 'hit_article_set',
         blank=True,
-        null=True,
         )
     coordinate = models.CharField(max_length=100, null=True, blank=True, verbose_name='좌표')
 
