@@ -8,8 +8,5 @@ def map(request):
     return render(request, 'map/map.html')
 
 
-def return_coord(request, mapx, mapy):
-    return JsonResponse({'success': True, 'mapx': mapx, 'mapy': mapy})
-
 
 

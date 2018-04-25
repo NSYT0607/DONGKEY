@@ -50,7 +50,7 @@
     $("#address_p_title").text("{0}".format(info_title));
     $("#address_p_address").text("{0}".format(info_address));
     $("#img_loc")
-        .attr("src", "https://openapi.naver.com/v1/map/staticmap.bin?clientId=HgDOpjOFssES9HHhpUyD&url=file://localhost:8000&crs=EPSG:4326&center={0},{1}&level=11&w=150&h=150&baselayer=default&markers={0},{1}".format(info_LatLng_lng, info_LatLng_lat, info_LatLng_lng, info_LatLng_lat));
+        .attr("src", "https://openapi.naver.com/v1/map/staticmap.bin?clientId=HgDOpjOFssES9HHhpUyD&url=file://localhost:8000&crs=EPSG:4326&center={0},{1}&level=11&w=150&h=150&baselayer=default&markers={0},{1}".format(info_LatLng_lng, info_LatLng_lat));
     $("#img_a")
         .attr("href", "http://maps.naver.com/?menu=location&mapMode=0&lat={0}&lng={1}&dlevel=12&enc=b64".format(info_LatLng_lat, info_LatLng_lng));
 </script>

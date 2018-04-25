@@ -30,7 +30,7 @@ class Article(models.Model):
         related_name = 'hit_article_set',
         blank=True,
         )
-    coordinate = models.CharField(max_length=100, null=True, blank=True, verbose_name='좌표')
+    coordinate = models.CharField(max_length=500, null=True, blank=True, verbose_name='장소 관련 정보')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
