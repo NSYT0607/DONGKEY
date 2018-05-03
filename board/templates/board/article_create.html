@@ -15,18 +15,19 @@
     <div id ="address_div">
         <p id="address_p_title">오잉또잉</p>
         <p id="address_p_address"></p>
+        <button class="btn" id="delete_location">삭제</button>
     </div>
 </div>
 
 <br />
   <!-- Modal Trigger -->
- <a class="waves-effect waves-light btn modal-trigger" href="#modal1">위치</a>
+<a class="waves-effect waves-light btn modal-trigger" href="#modal1">위치</a>
   <!-- Modal Structure -->
- <div id="modal1" class="modal" style="top: 4%; max-height: 95%">
+<div id="modal1" class="modal" style="top: 4%; max-height: 95%">
      <div class="modal-content" style="padding: 10px;">
     {% include 'map/map.html' %}
      </div>
- </div>
+</div>
 
 <br/>
 <br/>
@@ -54,4 +55,12 @@
     $("#img_a")
         .attr("href", "http://maps.naver.com/?menu=location&mapMode=0&lat={0}&lng={1}&dlevel=12&enc=b64".format(info_LatLng_lat, info_LatLng_lng));
 </script>
+<script>
+    $("#delete_location").click(function(e) {
+        e.preventDefault();
+        $(".coord_result").addClass("invisible");
+        $("input#id_coordinate").val("");
+    });
+</script>
+
 {% endblock %}
