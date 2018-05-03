@@ -47,11 +47,12 @@ INSTALLED_APPS = [
     'finance',
     'recruiting',
     'board',
-  
+
     'schedule',
     'map',
-]
+    'hitcount',
 
+]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
