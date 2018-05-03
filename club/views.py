@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.views.generic import ListView
 from django.views.generic.base import ContextMixin, TemplateView
 from schedule.models import Calendar
+from django.core.paginator import Paginator
 
 from .models import ApplyList
 from .models import Club
@@ -19,6 +20,7 @@ from board.models import Article, Category
 
 
 class ClubView(PermissionRequiredMixin, ListView):
+    model = Article
     template_name = 'club/admin_club.html'
     context_object_name = 'notice_list'
     paginate_by = 5
@@ -33,6 +35,7 @@ class ClubView(PermissionRequiredMixin, ListView):
         context = super(ClubView, self).get_context_data(**kwargs)
         context['calendar_slug'] = Club.objects.get(pk=self.kwargs['pk']).calendar.slug
         context['club'] = Club.objects.get(pk=self.kwargs['pk'])
+        context['admin'] = self.request.user.member_set.filter(club__pk=self.kwargs['pk']).values('is_admin')
         return context
 
 
