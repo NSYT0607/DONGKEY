@@ -9,6 +9,6 @@ DATABASES = {
         'HOST': 'localhost',
         'NAME': 'DONGKey',
         'USER': 'NSY',
-        'PASSWORD': 'gjrjfl12!@',
+        'PASSWORD': '',
     },
 }
